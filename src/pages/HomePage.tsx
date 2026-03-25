@@ -44,10 +44,10 @@ export function HomePage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-heading font-bold text-2xl text-white">Your Lists</h2>
+        <h2 className="font-heading text-2xl text-stone-800">Your Lists</h2>
         <button
           onClick={() => setShowCreate(true)}
-          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-400 font-medium text-sm"
+          className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-400 font-medium text-sm"
         >
           + New List
         </button>
@@ -69,18 +69,18 @@ export function HomePage() {
                 onChange={e => setNewName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleCreate()}
                 autoFocus
-                className="flex-1 bg-white/5 text-white rounded-lg px-3 py-2.5 border border-white/10 focus:border-orange-500 focus:outline-none"
+                className="flex-1 bg-white text-stone-800 rounded-lg px-3 py-2.5 border border-orange-200 focus:border-rose-400 focus:outline-none placeholder:text-stone-300"
               />
               <button
                 onClick={handleCreate}
                 disabled={!newName.trim()}
-                className="px-4 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-400 disabled:opacity-50"
+                className="px-4 py-2.5 bg-rose-500 text-white rounded-lg hover:bg-rose-400 disabled:opacity-50"
               >
                 Create
               </button>
               <button
                 onClick={() => { setShowCreate(false); setNewName('') }}
-                className="px-3 py-2.5 bg-zinc-700 text-white rounded-lg hover:bg-zinc-600"
+                className="px-3 py-2.5 bg-stone-100 text-stone-600 rounded-lg hover:bg-stone-200"
               >
                 Cancel
               </button>
@@ -104,8 +104,8 @@ export function HomePage() {
 
       {activeLists.length === 0 && !showCreate && (
         <div className="text-center py-16">
-          <p className="text-zinc-500 text-lg">No lists yet</p>
-          <p className="text-zinc-600 text-sm mt-1">Create your first list to get started</p>
+          <p className="text-stone-400 text-lg">No lists yet</p>
+          <p className="text-stone-300 text-sm mt-1">Create your first list to get started</p>
         </div>
       )}
     </div>

@@ -54,6 +54,6 @@ public/icons/   # PWA icons
 
 - `vite.config.ts`: base path `/favorite-lists/`, Tailwind + PWA plugins
 - Settings stored in localStorage: display name, Supabase URL, Supabase anon key
-- Theme: warm orange/amber (#431407), Lilita One headings, Nunito body text
+- Theme: light cream + coral (#fff7ed bg, rose-500 accents), Barrio font throughout
 - Drag-and-drop reordering via @dnd-kit/core and @dnd-kit/sortable
 - Bottom tab bar: Rankings (/) and To Do (/todos)

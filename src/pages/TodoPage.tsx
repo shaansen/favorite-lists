@@ -45,7 +45,7 @@ export function TodoPage() {
 
   return (
     <div>
-      <h2 className="font-heading font-bold text-2xl text-white mb-4">Things to Do</h2>
+      <h2 className="font-heading text-2xl text-stone-800 mb-4">Things to Do</h2>
 
       <div className="space-y-2">
         <AnimatePresence>
@@ -56,11 +56,11 @@ export function TodoPage() {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
-              className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-3"
+              className="flex items-center gap-3 bg-white border border-orange-100 rounded-xl p-3 shadow-sm"
             >
-              <button onClick={() => toggleComplete(todo.id)} className="shrink-0 w-6 h-6 rounded-full border-2 border-orange-400/50 hover:border-orange-400 transition-colors" />
-              <p className="flex-1 text-white min-w-0 truncate">{todo.text}</p>
-              <button onClick={() => handleDelete(todo.id)} className="text-zinc-500 hover:text-red-400 p-1">
+              <button onClick={() => toggleComplete(todo.id)} className="shrink-0 w-6 h-6 rounded-full border-2 border-rose-300 hover:border-rose-500 transition-colors" />
+              <p className="flex-1 text-stone-800 min-w-0 truncate">{todo.text}</p>
+              <button onClick={() => handleDelete(todo.id)} className="text-stone-300 hover:text-red-400 p-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
@@ -72,7 +72,7 @@ export function TodoPage() {
 
       {completed.length > 0 && (
         <div className="mt-6">
-          <p className="text-xs text-zinc-500 uppercase tracking-wider mb-2">Completed</p>
+          <p className="text-xs text-stone-400 uppercase tracking-wider mb-2">Completed</p>
           <div className="space-y-2">
             <AnimatePresence>
               {completed.map(todo => (
@@ -82,15 +82,15 @@ export function TodoPage() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="flex items-center gap-3 bg-white/3 border border-white/5 rounded-xl p-3 opacity-50"
+                  className="flex items-center gap-3 bg-white/60 border border-orange-50 rounded-xl p-3 opacity-60"
                 >
-                  <button onClick={() => toggleComplete(todo.id)} className="shrink-0 w-6 h-6 rounded-full border-2 border-orange-400 bg-orange-400/20 flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-orange-400">
+                  <button onClick={() => toggleComplete(todo.id)} className="shrink-0 w-6 h-6 rounded-full border-2 border-rose-400 bg-rose-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-rose-500">
                       <path d="M20 6L9 17l-5-5" />
                     </svg>
                   </button>
-                  <p className="flex-1 text-zinc-400 line-through min-w-0 truncate">{todo.text}</p>
-                  <button onClick={() => handleDelete(todo.id)} className="text-zinc-600 hover:text-red-400 p-1">
+                  <p className="flex-1 text-stone-400 line-through min-w-0 truncate">{todo.text}</p>
+                  <button onClick={() => handleDelete(todo.id)} className="text-stone-300 hover:text-red-400 p-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
@@ -103,7 +103,7 @@ export function TodoPage() {
       )}
 
       {incomplete.length === 0 && completed.length === 0 && (
-        <p className="text-zinc-500 text-center py-8">Nothing here yet. Add something below.</p>
+        <p className="text-stone-400 text-center py-8">Nothing here yet. Add something below.</p>
       )}
 
       <form onSubmit={handleAdd} className="flex gap-2 mt-4">
@@ -112,12 +112,12 @@ export function TodoPage() {
           placeholder="Add a to-do..."
           value={text}
           onChange={e => setText(e.target.value)}
-          className="flex-1 bg-white/5 text-white rounded-lg px-3 py-2.5 border border-white/10 focus:border-orange-500 focus:outline-none"
+          className="flex-1 bg-white text-stone-800 rounded-lg px-3 py-2.5 border border-orange-200 focus:border-rose-400 focus:outline-none placeholder:text-stone-300"
         />
         <button
           type="submit"
           disabled={!text.trim()}
-          className="px-4 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-400 disabled:opacity-50 font-medium"
+          className="px-4 py-2.5 bg-rose-500 text-white rounded-lg hover:bg-rose-400 disabled:opacity-50 font-medium"
         >
           Add
         </button>

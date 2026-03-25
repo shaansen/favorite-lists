@@ -28,15 +28,15 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-4"
         >
           <motion.div
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-stone-900 rounded-2xl p-6 w-full max-w-md border border-stone-700/50"
+            className="bg-white rounded-2xl p-6 w-full max-w-md border border-orange-100 shadow-xl"
           >
-            <h2 className="text-xl font-heading font-bold text-white mb-4">What's your name?</h2>
+            <h2 className="text-xl font-heading text-stone-800 mb-4">What's your name?</h2>
 
             <input
               type="text"
@@ -44,7 +44,7 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               value={displayName}
               onChange={e => setDisplayName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSave()}
-              className="w-full bg-stone-800 text-white rounded-lg px-3 py-2.5 border border-stone-700 focus:border-orange-500 focus:outline-none"
+              className="w-full bg-orange-50 text-stone-800 rounded-lg px-3 py-2.5 border border-orange-200 focus:border-rose-400 focus:outline-none placeholder:text-stone-300"
               autoFocus
             />
 
@@ -52,7 +52,7 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               {initial && (
                 <button
                   onClick={onClose}
-                  className="flex-1 px-4 py-2.5 bg-zinc-700 text-white rounded-lg hover:bg-zinc-600"
+                  className="flex-1 px-4 py-2.5 bg-stone-100 text-stone-600 rounded-lg hover:bg-stone-200"
                 >
                   Cancel
                 </button>
@@ -60,7 +60,7 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               <button
                 onClick={handleSave}
                 disabled={!displayName}
-                className="flex-1 px-4 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-400 disabled:opacity-50 font-medium"
+                className="flex-1 px-4 py-2.5 bg-rose-500 text-white rounded-lg hover:bg-rose-400 disabled:opacity-50 font-medium"
               >
                 Save
               </button>

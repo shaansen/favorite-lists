@@ -34,12 +34,12 @@ export function ItemRow({ item, onDelete, isDragging }: ItemRowProps) {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
-      className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-3"
+      className="flex items-center gap-3 bg-white border border-orange-100 rounded-xl p-3 shadow-sm"
     >
       <button
         {...attributes}
         {...listeners}
-        className="touch-none text-zinc-500 hover:text-white p-1 cursor-grab active:cursor-grabbing"
+        className="touch-none text-stone-300 hover:text-stone-500 p-1 cursor-grab active:cursor-grabbing"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
           <circle cx="9" cy="6" r="1.5" />
@@ -51,20 +51,20 @@ export function ItemRow({ item, onDelete, isDragging }: ItemRowProps) {
         </svg>
       </button>
 
-      <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-heading font-bold text-sm flex items-center justify-center shrink-0">
+      <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-500 font-heading text-sm flex items-center justify-center shrink-0">
         {item.rank}
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-white font-medium truncate">{item.name}</p>
-        {item.notes && <p className="text-xs text-zinc-400 truncate">{item.notes}</p>}
+        <p className="text-stone-800 font-medium truncate">{item.name}</p>
+        {item.notes && <p className="text-xs text-stone-400 truncate">{item.notes}</p>}
       </div>
 
       <Avatar name={item.addedBy} size={22} />
 
       <button
         onClick={onDelete}
-        className="text-zinc-500 hover:text-red-400 p-1"
+        className="text-stone-300 hover:text-red-400 p-1"
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M18 6L6 18M6 6l12 12" />
