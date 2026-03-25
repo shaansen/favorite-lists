@@ -45,10 +45,7 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               value={displayName}
               onChange={e => setDisplayName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSave()}
-              className="w-full rounded-lg px-3 py-2.5 focus:outline-none"
-              style={{ backgroundColor: 'var(--color-theme-surface)', color: 'var(--color-theme-fg)', border: '1px solid var(--color-theme-border)' }}
-              onFocus={e => e.target.style.borderColor = 'var(--color-theme-primary)'}
-              onBlur={e => e.target.style.borderColor = 'var(--color-theme-border)'}
+              className="w-full rounded-lg px-3 py-2.5 focus:outline-none theme-input"
               autoFocus
             />
 
@@ -65,8 +62,7 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               <button
                 onClick={handleSave}
                 disabled={!displayName}
-                className="flex-1 px-4 py-2.5 rounded-lg font-medium disabled:opacity-50"
-                style={{ backgroundColor: 'var(--color-theme-primary)', color: '#fff' }}
+                className="flex-1 px-4 py-2.5 rounded-lg font-medium disabled:opacity-50 theme-btn-primary"
               >
                 Save
               </button>

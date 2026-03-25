@@ -47,8 +47,7 @@ export function HomePage() {
         <h2 className="font-heading text-2xl font-bold" style={{ color: 'var(--color-theme-fg)' }}>Your Lists</h2>
         <button
           onClick={() => setShowCreate(true)}
-          className="px-4 py-2 rounded-lg font-medium text-sm"
-          style={{ backgroundColor: 'var(--color-theme-primary)', color: '#fff' }}
+          className="px-4 py-2 rounded-lg font-medium text-sm theme-btn-primary"
         >
           + New List
         </button>
@@ -70,16 +69,12 @@ export function HomePage() {
                 onChange={e => setNewName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleCreate()}
                 autoFocus
-                className="flex-1 rounded-lg px-3 py-2.5 focus:outline-none"
-                style={{ backgroundColor: 'var(--color-theme-surface)', color: 'var(--color-theme-fg)', border: '1px solid var(--color-theme-border)' }}
-                onFocus={e => e.target.style.borderColor = 'var(--color-theme-primary)'}
-                onBlur={e => e.target.style.borderColor = 'var(--color-theme-border)'}
+                className="flex-1 rounded-lg px-3 py-2.5 focus:outline-none theme-input"
               />
               <button
                 onClick={handleCreate}
                 disabled={!newName.trim()}
-                className="px-4 py-2.5 rounded-lg disabled:opacity-50"
-                style={{ backgroundColor: 'var(--color-theme-primary)', color: '#fff' }}
+                className="px-4 py-2.5 rounded-lg disabled:opacity-50 theme-btn-primary"
               >
                 Create
               </button>

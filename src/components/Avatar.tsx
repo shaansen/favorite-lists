@@ -9,9 +9,9 @@ interface AvatarProps {
 
 export function Avatar({ name, size = 32 }: AvatarProps) {
   const svg = useMemo(() => {
-    const avatar = createAvatar(thumbs, { seed: name, size: 32 })
+    const avatar = createAvatar(thumbs, { seed: name, size })
     return avatar.toDataUri()
-  }, [name])
+  }, [name, size])
 
   return (
     <img

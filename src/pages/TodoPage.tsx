@@ -146,16 +146,12 @@ export function TodoPage() {
           placeholder="Add a to-do..."
           value={text}
           onChange={e => setText(e.target.value)}
-          className="flex-1 rounded-lg px-3 py-2.5 focus:outline-none"
-          style={{ backgroundColor: 'var(--color-theme-surface)', color: 'var(--color-theme-fg)', border: '1px solid var(--color-theme-border)' }}
-          onFocus={e => e.target.style.borderColor = 'var(--color-theme-primary)'}
-          onBlur={e => e.target.style.borderColor = 'var(--color-theme-border)'}
+          className="flex-1 rounded-lg px-3 py-2.5 focus:outline-none theme-input"
         />
         <button
           type="submit"
           disabled={!text.trim()}
-          className="px-4 py-2.5 rounded-lg font-medium disabled:opacity-50"
-          style={{ backgroundColor: 'var(--color-theme-primary)', color: '#fff' }}
+          className="px-4 py-2.5 rounded-lg font-medium disabled:opacity-50 theme-btn-primary"
         >
           Add
         </button>
