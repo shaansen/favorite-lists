@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-heading: 'Barrio', cursive;
-  --font-body: 'Barrio', cursive;
+  --font-heading: 'Eczar', serif;
+  --font-body: 'Libre Franklin', sans-serif;
 }
 
 body {
