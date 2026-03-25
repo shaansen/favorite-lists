@@ -9,6 +9,7 @@ interface AppContextValue {
   settings: AppSettings | null
   setSettings: (s: AppSettings) => void
   updateData: (updater: (prev: AppData) => AppData) => void
+  forceSync: () => Promise<void>
   showSettings: boolean
   setShowSettings: (v: boolean) => void
 }
@@ -17,11 +18,11 @@ const AppContext = createContext<AppContextValue | null>(null)
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const { settings, setSettings } = useSettings()
-  const { data, status, updateData } = useSync(settings)
+  const { data, status, updateData, forceSync } = useSync(settings)
   const [showSettings, setShowSettings] = useState(!settings)
 
   return (
-    <AppContext.Provider value={{ data, status, settings, setSettings, updateData, showSettings, setShowSettings }}>
+    <AppContext.Provider value={{ data, status, settings, setSettings, updateData, forceSync, showSettings, setShowSettings }}>
       {children}
     </AppContext.Provider>
   )

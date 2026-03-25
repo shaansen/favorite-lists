@@ -17,6 +17,7 @@ export function ItemRow({ item, onDelete, onEdit, isDragging }: ItemRowProps) {
   const [editName, setEditName] = useState(item.name)
   const [editNotes, setEditNotes] = useState(item.notes)
   const nameRef = useRef<HTMLInputElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
   const {
     attributes,
@@ -92,20 +93,24 @@ export function ItemRow({ item, onDelete, onEdit, isDragging }: ItemRowProps) {
       </div>
 
       {editing ? (
-        <div className="flex-1 min-w-0 space-y-1">
+        <div
+          ref={containerRef}
+          className="flex-1 min-w-0 space-y-1"
+          onBlur={(e) => {
+            if (!containerRef.current?.contains(e.relatedTarget as Node)) save()
+          }}
+        >
           <input
             ref={nameRef}
             value={editName}
             onChange={e => setEditName(e.target.value)}
             onKeyDown={handleKeyDown}
-            onBlur={save}
             className="w-full rounded-md px-2 py-1 font-medium focus:outline-none theme-input"
           />
           <input
             value={editNotes}
             onChange={e => setEditNotes(e.target.value)}
             onKeyDown={handleKeyDown}
-            onBlur={save}
             placeholder="Notes (optional)"
             className="w-full rounded-md px-2 py-1 text-sm focus:outline-none theme-input"
           />

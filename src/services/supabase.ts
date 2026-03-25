@@ -69,22 +69,23 @@ export async function testConnection(url: string, anonKey: string): Promise<bool
   }
 }
 
-export function subscribe(callback: (data: AppData, updatedAt: string) => void): () => void {
-  const channel: RealtimeChannel = getClient()
-    .channel('app_data_changes')
-    .on(
-      'postgres_changes',
-      { event: 'UPDATE', schema: 'public', table: 'app_data', filter: 'id=eq.singleton' },
-      (payload) => {
-        const row = payload.new as { data: AppData; updated_at: string }
-        callback(row.data, row.updated_at)
-      }
-    )
+let broadcastChannel: RealtimeChannel | null = null
+
+export function subscribeBroadcast(onNotified: () => void): () => void {
+  const channel = getClient()
+    .channel('app_sync')
+    .on('broadcast', { event: 'data_updated' }, () => onNotified())
     .subscribe()
 
+  broadcastChannel = channel
   return () => {
     getClient().removeChannel(channel)
+    broadcastChannel = null
   }
+}
+
+export function broadcastUpdate() {
+  broadcastChannel?.send({ type: 'broadcast', event: 'data_updated', payload: {} })
 }
 
 export class ConflictError extends Error {

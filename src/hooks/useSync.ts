@@ -38,5 +38,14 @@ export function useSync(settings: AppSettings | null) {
     })
   }, [])
 
-  return { data, status, updateData }
+  const forceSync = useCallback(async () => {
+    try {
+      const d = await syncManager.forceSync()
+      setData(d)
+    } catch {
+      setStatus('error')
+    }
+  }, [])
+
+  return { data, status, updateData, forceSync }
 }

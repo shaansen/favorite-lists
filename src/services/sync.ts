@@ -1,5 +1,5 @@
 import type { AppData, SyncStatus } from '../types'
-import { initClient, fetchData, writeData, initializeIfMissing, subscribe, ConflictError } from './supabase'
+import { initClient, fetchData, writeData, initializeIfMissing, subscribeBroadcast, broadcastUpdate, ConflictError } from './supabase'
 import { storage } from './storage'
 import { mergeData } from '../utils/merge'
 
@@ -41,12 +41,7 @@ export class SyncManager {
 
   startListening() {
     this.stopListening()
-    this.unsubscribe = subscribe((remoteData, updatedAt) => {
-      const local = storage.getData() ?? { lists: [], todos: [] }
-      const merged = mergeData(local, remoteData)
-      storage.setUpdatedAt(updatedAt)
-      this.emit(merged, 'synced')
-    })
+    this.unsubscribe = subscribeBroadcast(() => this.forceSync())
     window.addEventListener('online', this.handleOnline)
   }
 
@@ -75,6 +70,7 @@ export class SyncManager {
       const newUpdatedAt = await writeData(data, this.displayName, updatedAt)
       storage.setUpdatedAt(newUpdatedAt)
       this.emit(data, 'synced')
+      broadcastUpdate()
     } catch (e) {
       if (e instanceof ConflictError) {
         const result = await fetchData()
@@ -83,11 +79,22 @@ export class SyncManager {
         const newUpdatedAt = await writeData(merged, this.displayName, result.updatedAt)
         storage.setUpdatedAt(newUpdatedAt)
         this.emit(merged, 'synced')
+        broadcastUpdate()
       } else {
         storage.enqueue(data)
         this.emit(data, 'error')
       }
     }
+  }
+
+  async forceSync(): Promise<AppData> {
+    this.listener?.(storage.getData() ?? { lists: [], todos: [] }, 'syncing')
+    const result = await fetchData()
+    const local = storage.getData() ?? { lists: [], todos: [] }
+    const merged = mergeData(local, result.data)
+    storage.setUpdatedAt(result.updatedAt)
+    this.emit(merged, 'synced')
+    return merged
   }
 
   private async flushQueue() {
