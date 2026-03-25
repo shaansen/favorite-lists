@@ -61,12 +61,24 @@ export function TodoPage() {
             >
               <button
                 onClick={() => toggleComplete(todo.id)}
-                className="shrink-0 w-6 h-6 rounded-full transition-colors"
-                style={{ border: '2px solid var(--color-theme-border-strong)' }}
-              />
+                role="checkbox"
+                aria-checked="false"
+                aria-label={`Mark "${todo.text}" as complete`}
+                className="shrink-0 w-11 h-11 flex items-center justify-center"
+              >
+                <span
+                  className="w-6 h-6 rounded-full transition-colors"
+                  style={{ border: '2px solid var(--color-theme-border-strong)' }}
+                />
+              </button>
               <p className="flex-1 min-w-0 break-words" style={{ color: 'var(--color-theme-fg)' }}>{todo.text}</p>
-              <button onClick={() => handleDelete(todo.id)} className="p-1 hover:opacity-80" style={{ color: 'var(--color-theme-danger)' }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <button
+                onClick={() => handleDelete(todo.id)}
+                aria-label={`Delete "${todo.text}"`}
+                className="w-11 h-11 flex items-center justify-center hover:opacity-80 shrink-0"
+                style={{ color: 'var(--color-theme-danger)' }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
@@ -92,16 +104,28 @@ export function TodoPage() {
                 >
                   <button
                     onClick={() => toggleComplete(todo.id)}
-                    className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center"
-                    style={{ border: '2px solid var(--color-theme-primary)', backgroundColor: 'color-mix(in srgb, var(--color-theme-primary) 20%, transparent)' }}
+                    role="checkbox"
+                    aria-checked="true"
+                    aria-label={`Uncheck "${todo.text}"`}
+                    className="shrink-0 w-11 h-11 flex items-center justify-center"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-theme-primary)' }}>
-                      <path d="M20 6L9 17l-5-5" />
-                    </svg>
+                    <span
+                      className="w-6 h-6 rounded-full flex items-center justify-center"
+                      style={{ border: '2px solid var(--color-theme-primary)', backgroundColor: 'color-mix(in srgb, var(--color-theme-primary) 20%, transparent)' }}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-theme-primary)' }}>
+                        <path d="M20 6L9 17l-5-5" />
+                      </svg>
+                    </span>
                   </button>
                   <p className="flex-1 line-through min-w-0 break-words" style={{ color: 'var(--color-theme-fg-muted)' }}>{todo.text}</p>
-                  <button onClick={() => handleDelete(todo.id)} className="p-1 hover:opacity-80" style={{ color: 'var(--color-theme-danger)' }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <button
+                    onClick={() => handleDelete(todo.id)}
+                    aria-label={`Delete "${todo.text}"`}
+                    className="w-11 h-11 flex items-center justify-center hover:opacity-80 shrink-0"
+                    style={{ color: 'var(--color-theme-danger)' }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 6L6 18M6 6l12 12" />
                     </svg>
                   </button>

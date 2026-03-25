@@ -101,7 +101,8 @@ export function ListDetailPage() {
     <div>
       <button
         onClick={() => navigate('/')}
-        className="flex items-center gap-1 mb-4 text-sm"
+        aria-label="Back to lists"
+        className="flex items-center gap-1 mb-4 text-sm min-h-[44px]"
         style={{ color: 'var(--color-theme-fg-muted)' }}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

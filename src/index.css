@@ -30,3 +30,11 @@ h1, h2, h3, h4, h5, h6 {
 input, button {
   font-size: 16px;
 }
+
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}

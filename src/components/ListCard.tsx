@@ -17,7 +17,7 @@ export function ListCard({ list, onClick, onDelete }: ListCardProps) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="rounded-xl p-4 cursor-pointer hover:shadow-md transition-all group"
+      className="rounded-xl p-4 cursor-pointer hover:shadow-md transition-all"
       style={{ backgroundColor: 'var(--color-theme-surface)', border: '1px solid var(--color-theme-border)' }}
       onClick={onClick}
     >
@@ -28,7 +28,8 @@ export function ListCard({ list, onClick, onDelete }: ListCardProps) {
         </div>
         <button
           onClick={e => { e.stopPropagation(); onDelete() }}
-          className="opacity-0 group-hover:opacity-100 transition-all p-1 hover:opacity-80"
+          aria-label="Delete list"
+          className="w-11 h-11 flex items-center justify-center transition-colors hover:opacity-80 shrink-0 -mr-2 -mt-2"
           style={{ color: 'var(--color-theme-danger)' }}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
