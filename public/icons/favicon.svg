@@ -1,17 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#4338ca"/>
-      <stop offset="100%" stop-color="#7c3aed"/>
-    </linearGradient>
-  </defs>
-  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
-  <g transform="translate(256,240)" fill="white">
-    <polygon points="0,-80 21,-25 80,-31 34,12 52,69 0,40 -52,69 -34,12 -80,-31 -21,-25" opacity="0.95"/>
-  </g>
-  <g fill="white" opacity="0.9">
-    <rect x="156" y="320" width="200" height="12" rx="6"/>
-    <rect x="176" y="350" width="160" height="10" rx="5"/>
-    <rect x="196" y="375" width="120" height="10" rx="5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+  <rect width="640" height="640" rx="128" fill="#10B981"/>
+  <g transform="translate(70, 70) scale(5)">
+    <metadata xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/"><rdf:RDF><rdf:Description><dc:title>Thumbs</dc:title><dc:creator>DiceBear</dc:creator><dc:source xsi:type="dcterms:URI">https://www.dicebear.com</dc:source><dcterms:license xsi:type="dcterms:URI">https://creativecommons.org/publicdomain/zero/1.0/</dcterms:license><dc:rights>„Thumbs” (https://www.dicebear.com) by „DiceBear”, licensed under „CC0 1.0” (https://creativecommons.org/publicdomain/zero/1.0/)</dc:rights></rdf:Description></rdf:RDF></metadata><mask id="viewboxMask"><rect width="100" height="100" rx="0" ry="0" x="0" y="0" fill="#fff" /></mask><g mask="url(#viewboxMask)"><rect fill="#10B981" width="100" height="100" x="0" y="0" /><g transform="translate(-3, 3) rotate(-12 50 70)"><path d="M95 53.33C95 29.4 74.85 10 50 10S5 29.4 5 53.33V140h90V53.33Z" fill="#69d2e7"/><g transform="translate(29 33)"><g transform="translate(-14, -8) rotate(-9 21 21)"><g transform="translate(0 5)"><path d="M6.5 10C2.62 10-.61 5.77.1 5.15c.71-.62 2.63 1.3 6.4 1.3 3.77 0 5.69-2 6.4-1.3S10.38 10 6.5 10ZM35.5 10c-3.88 0-7.11-4.23-6.4-4.85.71-.62 2.63 1.3 6.4 1.3 3.77 0 5.69-2 6.4-1.3S39.38 10 35.5 10Z" fill="#ffffff"/></g><g transform="translate(6 23)"><path d="M15 10C6.79 10 3.02 3.88 4.22 3.12 5.42 2.35 6.1 6.6 15 6.49c8.9-.12 9.58-4.23 10.78-3.37C26.98 3.98 23.21 10 15 10Z" fill="#ffffff"/></g></g></g></g></g>
   </g>
 </svg>
