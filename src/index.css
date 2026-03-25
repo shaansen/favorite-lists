@@ -1,8 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --font-heading: 'Eczar', serif;
-  --font-body: 'Libre Franklin', sans-serif;
+  --font-heading: 'Libre Franklin', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Eczar', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+  --color-theme-bg: #ECFDF5;
+  --color-theme-surface: #E2F3EB;
+  --color-theme-fg: #064E3B;
+  --color-theme-fg-muted: #658176;
+  --color-theme-border: #CADCD5;
+  --color-theme-border-strong: #A6BEB4;
+  --color-theme-primary: #10B981;
+  --color-theme-primary-hover: #37CD93;
+  --color-theme-danger: #A13D34;
 }
 
 body {

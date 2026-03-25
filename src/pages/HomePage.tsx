@@ -44,10 +44,11 @@ export function HomePage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-heading text-2xl text-stone-800">Your Lists</h2>
+        <h2 className="font-heading text-2xl font-bold" style={{ color: 'var(--color-theme-fg)' }}>Your Lists</h2>
         <button
           onClick={() => setShowCreate(true)}
-          className="px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-400 font-medium text-sm"
+          className="px-4 py-2 rounded-lg font-medium text-sm"
+          style={{ backgroundColor: 'var(--color-theme-primary)', color: '#fff' }}
         >
           + New List
         </button>
@@ -69,18 +70,23 @@ export function HomePage() {
                 onChange={e => setNewName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleCreate()}
                 autoFocus
-                className="flex-1 bg-white text-stone-800 rounded-lg px-3 py-2.5 border border-orange-200 focus:border-rose-400 focus:outline-none placeholder:text-stone-300"
+                className="flex-1 rounded-lg px-3 py-2.5 focus:outline-none"
+                style={{ backgroundColor: 'var(--color-theme-surface)', color: 'var(--color-theme-fg)', border: '1px solid var(--color-theme-border)' }}
+                onFocus={e => e.target.style.borderColor = 'var(--color-theme-primary)'}
+                onBlur={e => e.target.style.borderColor = 'var(--color-theme-border)'}
               />
               <button
                 onClick={handleCreate}
                 disabled={!newName.trim()}
-                className="px-4 py-2.5 bg-rose-500 text-white rounded-lg hover:bg-rose-400 disabled:opacity-50"
+                className="px-4 py-2.5 rounded-lg disabled:opacity-50"
+                style={{ backgroundColor: 'var(--color-theme-primary)', color: '#fff' }}
               >
                 Create
               </button>
               <button
                 onClick={() => { setShowCreate(false); setNewName('') }}
-                className="px-3 py-2.5 bg-stone-100 text-stone-600 rounded-lg hover:bg-stone-200"
+                className="px-3 py-2.5 rounded-lg"
+                style={{ backgroundColor: 'var(--color-theme-surface)', color: 'var(--color-theme-fg)', border: '1px solid var(--color-theme-border)' }}
               >
                 Cancel
               </button>
@@ -104,8 +110,8 @@ export function HomePage() {
 
       {activeLists.length === 0 && !showCreate && (
         <div className="text-center py-16">
-          <p className="text-stone-400 text-lg">No lists yet</p>
-          <p className="text-stone-300 text-sm mt-1">Create your first list to get started</p>
+          <p className="text-lg" style={{ color: 'var(--color-theme-fg-muted)' }}>No lists yet</p>
+          <p className="text-sm mt-1" style={{ color: 'var(--color-theme-border-strong)' }}>Create your first list to get started</p>
         </div>
       )}
     </div>

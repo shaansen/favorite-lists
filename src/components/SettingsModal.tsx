@@ -34,9 +34,10 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl p-6 w-full max-w-md border border-orange-100 shadow-xl"
+            className="rounded-2xl p-6 w-full max-w-md shadow-xl"
+            style={{ backgroundColor: 'var(--color-theme-bg)', border: '1px solid var(--color-theme-border)' }}
           >
-            <h2 className="text-xl font-heading text-stone-800 mb-4">What's your name?</h2>
+            <h2 className="text-xl font-heading font-bold mb-4" style={{ color: 'var(--color-theme-fg)' }}>What's your name?</h2>
 
             <input
               type="text"
@@ -44,7 +45,10 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               value={displayName}
               onChange={e => setDisplayName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSave()}
-              className="w-full bg-orange-50 text-stone-800 rounded-lg px-3 py-2.5 border border-orange-200 focus:border-rose-400 focus:outline-none placeholder:text-stone-300"
+              className="w-full rounded-lg px-3 py-2.5 focus:outline-none"
+              style={{ backgroundColor: 'var(--color-theme-surface)', color: 'var(--color-theme-fg)', border: '1px solid var(--color-theme-border)' }}
+              onFocus={e => e.target.style.borderColor = 'var(--color-theme-primary)'}
+              onBlur={e => e.target.style.borderColor = 'var(--color-theme-border)'}
               autoFocus
             />
 
@@ -52,7 +56,8 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               {initial && (
                 <button
                   onClick={onClose}
-                  className="flex-1 px-4 py-2.5 bg-stone-100 text-stone-600 rounded-lg hover:bg-stone-200"
+                  className="flex-1 px-4 py-2.5 rounded-lg"
+                  style={{ backgroundColor: 'var(--color-theme-surface)', color: 'var(--color-theme-fg)', border: '1px solid var(--color-theme-border)' }}
                 >
                   Cancel
                 </button>
@@ -60,7 +65,8 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               <button
                 onClick={handleSave}
                 disabled={!displayName}
-                className="flex-1 px-4 py-2.5 bg-rose-500 text-white rounded-lg hover:bg-rose-400 disabled:opacity-50 font-medium"
+                className="flex-1 px-4 py-2.5 rounded-lg font-medium disabled:opacity-50"
+                style={{ backgroundColor: 'var(--color-theme-primary)', color: '#fff' }}
               >
                 Save
               </button>
