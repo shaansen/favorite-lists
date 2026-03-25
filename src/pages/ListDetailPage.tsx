@@ -1,22 +1,41 @@
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { v4 as uuid } from 'uuid'
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+} from '@dnd-kit/core'
+import type { DragStartEvent, DragEndEvent } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
 import type { ListItem } from '../types'
 import { useApp } from '../context/AppContext'
 import { ItemRow } from '../components/ItemRow'
 import { AddItemForm } from '../components/AddItemForm'
+import { Avatar } from '../components/Avatar'
 
 export function ListDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data, updateData, settings } = useApp()
+  const [activeId, setActiveId] = useState<string | null>(null)
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } })
+  )
 
   const list = data.lists.find(l => l.id === id)
   if (!list || list.deletedAt) {
     return (
       <div className="text-center py-16">
         <p className="text-zinc-400">List not found</p>
-        <button onClick={() => navigate('/')} className="text-indigo-400 mt-2">Go back</button>
+        <button onClick={() => navigate('/')} className="text-orange-400 mt-2">Go back</button>
       </div>
     )
   }
@@ -25,8 +44,11 @@ export function ListDetailPage() {
     .filter(i => !i.deletedAt)
     .sort((a, b) => a.rank - b.rank)
 
+  const activeItem = activeItems.find(i => i.id === activeId)
+
   const updateList = (updater: (items: ListItem[]) => ListItem[]) => {
     updateData(prev => ({
+      ...prev,
       lists: prev.lists.map(l =>
         l.id === id ? { ...l, items: updater(l.items) } : l
       ),
@@ -51,20 +73,26 @@ export function ListDetailPage() {
     )
   }
 
-  const handleMove = (itemId: string, direction: 'up' | 'down') => {
-    const idx = activeItems.findIndex(i => i.id === itemId)
-    if (idx < 0) return
-    const swapIdx = direction === 'up' ? idx - 1 : idx + 1
-    if (swapIdx < 0 || swapIdx >= activeItems.length) return
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string)
+  }
 
-    const rankA = activeItems[idx].rank
-    const rankB = activeItems[swapIdx].rank
+  const handleDragEnd = (event: DragEndEvent) => {
+    setActiveId(null)
+    const { active, over } = event
+    if (!over || active.id === over.id) return
+
+    const oldIndex = activeItems.findIndex(i => i.id === active.id)
+    const newIndex = activeItems.findIndex(i => i.id === over.id)
+    if (oldIndex < 0 || newIndex < 0) return
+
+    const reordered = arrayMove(activeItems, oldIndex, newIndex)
+    const rankMap = new Map(reordered.map((item, idx) => [item.id, idx + 1]))
 
     updateList(items =>
       items.map(i => {
-        if (i.id === activeItems[idx].id) return { ...i, rank: rankB }
-        if (i.id === activeItems[swapIdx].id) return { ...i, rank: rankA }
-        return i
+        const newRank = rankMap.get(i.id)
+        return newRank != null ? { ...i, rank: newRank } : i
       })
     )
   }
@@ -83,21 +111,42 @@ export function ListDetailPage() {
 
       <h2 className="font-heading font-bold text-2xl text-white mb-4">{list.name}</h2>
 
-      <div className="space-y-2">
-        <AnimatePresence>
-          {activeItems.map((item, idx) => (
-            <ItemRow
-              key={item.id}
-              item={item}
-              isFirst={idx === 0}
-              isLast={idx === activeItems.length - 1}
-              onMoveUp={() => handleMove(item.id, 'up')}
-              onMoveDown={() => handleMove(item.id, 'down')}
-              onDelete={() => handleDelete(item.id)}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={activeItems.map(i => i.id)} strategy={verticalListSortingStrategy}>
+          <div className="space-y-2">
+            <AnimatePresence>
+              {activeItems.map(item => (
+                <ItemRow
+                  key={item.id}
+                  item={item}
+                  onDelete={() => handleDelete(item.id)}
+                  isDragging={item.id === activeId}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
+        </SortableContext>
+
+        <DragOverlay>
+          {activeItem && (
+            <div className="flex items-center gap-3 bg-white/10 border border-white/20 rounded-xl p-3 shadow-2xl">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-heading font-bold text-sm flex items-center justify-center shrink-0">
+                {activeItem.rank}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-white font-medium truncate">{activeItem.name}</p>
+                {activeItem.notes && <p className="text-xs text-zinc-400 truncate">{activeItem.notes}</p>}
+              </div>
+              <Avatar name={activeItem.addedBy} size={22} />
+            </div>
+          )}
+        </DragOverlay>
+      </DndContext>
 
       {activeItems.length === 0 && (
         <p className="text-zinc-500 text-center py-8">No items yet. Add the first one below.</p>

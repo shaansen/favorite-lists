@@ -32,7 +32,7 @@ export class SyncManager {
       return result.data
     } catch {
       const updatedAt = await initializeIfMissing()
-      const empty: AppData = { lists: [] }
+      const empty: AppData = { lists: [], todos: [] }
       storage.setData(empty)
       storage.setUpdatedAt(updatedAt)
       return empty
@@ -42,7 +42,7 @@ export class SyncManager {
   startListening() {
     this.stopListening()
     this.unsubscribe = subscribe((remoteData, updatedAt) => {
-      const local = storage.getData() ?? { lists: [] }
+      const local = storage.getData() ?? { lists: [], todos: [] }
       const merged = mergeData(local, remoteData)
       storage.setUpdatedAt(updatedAt)
       this.emit(merged, 'synced')

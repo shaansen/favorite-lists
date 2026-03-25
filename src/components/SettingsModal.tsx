@@ -34,7 +34,7 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-zinc-900 rounded-2xl p-6 w-full max-w-md border border-zinc-700/50"
+            className="bg-stone-900 rounded-2xl p-6 w-full max-w-md border border-stone-700/50"
           >
             <h2 className="text-xl font-heading font-bold text-white mb-4">What's your name?</h2>
 
@@ -44,7 +44,7 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               value={displayName}
               onChange={e => setDisplayName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleSave()}
-              className="w-full bg-zinc-800 text-white rounded-lg px-3 py-2.5 border border-zinc-700 focus:border-indigo-500 focus:outline-none"
+              className="w-full bg-stone-800 text-white rounded-lg px-3 py-2.5 border border-stone-700 focus:border-orange-500 focus:outline-none"
               autoFocus
             />
 
@@ -60,7 +60,7 @@ export function SettingsModal({ open, onClose, onSave, initial }: SettingsModalP
               <button
                 onClick={handleSave}
                 disabled={!displayName}
-                className="flex-1 px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 disabled:opacity-50 font-medium"
+                className="flex-1 px-4 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-400 disabled:opacity-50 font-medium"
               >
                 Save
               </button>

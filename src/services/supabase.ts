@@ -51,7 +51,7 @@ export async function initializeIfMissing(): Promise<string> {
 
   const { data, error } = await getClient()
     .from('app_data')
-    .upsert({ id: 'singleton', data: { lists: [] } })
+    .upsert({ id: 'singleton', data: { lists: [], todos: [] } })
     .select('updated_at')
     .single()
 

@@ -12,11 +12,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/*.png'],
       manifest: {
-        name: 'Favorite Lists',
-        short_name: 'FavLists',
+        name: 'Rank our Favorites',
+        short_name: 'Rank It',
         description: 'Collaborative ranked lists of favorite things',
-        theme_color: '#1e1b4b',
-        background_color: '#1e1b4b',
+        theme_color: '#431407',
+        background_color: '#431407',
         display: 'standalone',
         start_url: '/favorite-lists/',
         scope: '/favorite-lists/',
@@ -28,14 +28,6 @@ export default defineConfig({
       },
       workbox: {
         runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/api\.github\.com\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'github-api',
-              expiration: { maxEntries: 10, maxAgeSeconds: 300 },
-            },
-          },
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',

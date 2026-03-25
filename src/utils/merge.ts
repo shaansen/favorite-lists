@@ -1,4 +1,4 @@
-import type { AppData, FavoriteList, ListItem } from '../types'
+import type { AppData, FavoriteList, ListItem, TodoItem } from '../types'
 
 const TOMBSTONE_TTL = 24 * 60 * 60 * 1000
 
@@ -33,6 +33,20 @@ function mergeLists(local: FavoriteList[], remote: FavoriteList[]): FavoriteList
   return Array.from(map.values())
 }
 
+function mergeTodos(local: TodoItem[], remote: TodoItem[]): TodoItem[] {
+  const map = new Map<string, TodoItem>()
+  for (const todo of remote) map.set(todo.id, todo)
+  for (const todo of local) {
+    const existing = map.get(todo.id)
+    if (!existing) {
+      map.set(todo.id, todo)
+    } else if (todo.deletedAt && !existing.deletedAt) {
+      map.set(todo.id, todo)
+    }
+  }
+  return Array.from(map.values())
+}
+
 function purgeTombstones(data: AppData): AppData {
   const cutoff = new Date(Date.now() - TOMBSTONE_TTL).toISOString()
   return {
@@ -42,10 +56,14 @@ function purgeTombstones(data: AppData): AppData {
         ...l,
         items: l.items.filter(i => !i.deletedAt || i.deletedAt > cutoff),
       })),
+    todos: (data.todos ?? []).filter(t => !t.deletedAt || t.deletedAt > cutoff),
   }
 }
 
 export function mergeData(local: AppData, remote: AppData): AppData {
-  const merged = { lists: mergeLists(local.lists, remote.lists) }
+  const merged = {
+    lists: mergeLists(local.lists, remote.lists),
+    todos: mergeTodos(local.todos ?? [], remote.todos ?? []),
+  }
   return purgeTombstones(merged)
 }

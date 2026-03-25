@@ -1,6 +1,6 @@
-# Favorite Lists
+# Rank our Favorites
 
-Collaborative PWA for Shantanu and Charlie to create and manage ranked lists of favorite things (e.g., "Favorite Hamburgers").
+Collaborative PWA for Shantanu and Charlie to create and manage ranked lists of favorite things (e.g., "Favorite Hamburgers") and shared to-do lists.
 
 ## Architecture
 
@@ -15,7 +15,7 @@ Collaborative PWA for Shantanu and Charlie to create and manage ranked lists of 
 ```
 src/
   components/   # ListCard, ItemRow, AddItemForm, SettingsModal, SyncStatus, Layout, Avatar
-  pages/        # HomePage, ListDetailPage
+  pages/        # HomePage, ListDetailPage, TodoPage
   services/     # supabase.ts (API client), sync.ts (realtime/push), storage.ts (localStorage)
   hooks/        # useSync.ts, useSettings.ts
   types/        # index.ts (all interfaces)
@@ -54,4 +54,6 @@ public/icons/   # PWA icons
 
 - `vite.config.ts`: base path `/favorite-lists/`, Tailwind + PWA plugins
 - Settings stored in localStorage: display name, Supabase URL, Supabase anon key
-- Theme: deep indigo/purple (#1e1b4b), Space Grotesk headings, Inter body text
+- Theme: warm orange/amber (#431407), Lilita One headings, Nunito body text
+- Drag-and-drop reordering via @dnd-kit/core and @dnd-kit/sortable
+- Bottom tab bar: Rankings (/) and To Do (/todos)

@@ -3,6 +3,7 @@ import { AppProvider } from './context/AppContext'
 import { Layout } from './components/Layout'
 import { HomePage } from './pages/HomePage'
 import { ListDetailPage } from './pages/ListDetailPage'
+import { TodoPage } from './pages/TodoPage'
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/list/:id" element={<ListDetailPage />} />
+            <Route path="/todos" element={<TodoPage />} />
           </Routes>
         </Layout>
       </AppProvider>

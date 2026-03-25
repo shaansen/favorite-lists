@@ -4,7 +4,7 @@ import { syncManager } from '../services/sync'
 import { storage } from '../services/storage'
 
 export function useSync(settings: AppSettings | null) {
-  const [data, setData] = useState<AppData>(storage.getData() ?? { lists: [] })
+  const [data, setData] = useState<AppData>(storage.getData() ?? { lists: [], todos: [] })
   const [status, setStatus] = useState<SyncStatus>('synced')
   const initialized = useRef(false)
 

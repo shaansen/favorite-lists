@@ -17,6 +17,7 @@ export function HomePage() {
     if (!newName.trim() || !settings) return
     const id = uuid()
     updateData(prev => ({
+      ...prev,
       lists: [...prev.lists, {
         id,
         name: newName.trim(),
@@ -33,6 +34,7 @@ export function HomePage() {
   const handleDelete = (id: string) => {
     if (!confirm('Delete this list?')) return
     updateData(prev => ({
+      ...prev,
       lists: prev.lists.map(l =>
         l.id === id ? { ...l, deletedAt: new Date().toISOString() } : l
       ),
@@ -45,7 +47,7 @@ export function HomePage() {
         <h2 className="font-heading font-bold text-2xl text-white">Your Lists</h2>
         <button
           onClick={() => setShowCreate(true)}
-          className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 font-medium text-sm"
+          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-400 font-medium text-sm"
         >
           + New List
         </button>
@@ -67,12 +69,12 @@ export function HomePage() {
                 onChange={e => setNewName(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleCreate()}
                 autoFocus
-                className="flex-1 bg-white/5 text-white rounded-lg px-3 py-2.5 border border-white/10 focus:border-indigo-500 focus:outline-none"
+                className="flex-1 bg-white/5 text-white rounded-lg px-3 py-2.5 border border-white/10 focus:border-orange-500 focus:outline-none"
               />
               <button
                 onClick={handleCreate}
                 disabled={!newName.trim()}
-                className="px-4 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 disabled:opacity-50"
+                className="px-4 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-400 disabled:opacity-50"
               >
                 Create
               </button>
