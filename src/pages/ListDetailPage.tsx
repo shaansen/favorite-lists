@@ -127,7 +127,7 @@ export function ListDetailPage() {
       >
         <SortableContext items={activeItems.map(i => i.id)} strategy={verticalListSortingStrategy}>
           <div className="space-y-2">
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {activeItems.map(item => (
                 <ItemRow
                   key={item.id}

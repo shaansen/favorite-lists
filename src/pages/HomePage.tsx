@@ -91,7 +91,7 @@ export function HomePage() {
       </AnimatePresence>
 
       <div className="grid gap-3">
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {activeLists.map(list => (
             <ListCard
               key={list.id}

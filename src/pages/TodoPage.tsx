@@ -87,7 +87,7 @@ export function TodoPage() {
       <h2 className="font-heading text-2xl font-bold mb-4" style={{ color: 'var(--color-theme-fg)' }}>Things to Do</h2>
 
       <div className="space-y-2">
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {incomplete.map(todo => (
             <motion.div
               key={todo.id}
@@ -134,7 +134,7 @@ export function TodoPage() {
         <div className="mt-6">
           <p className="text-sm uppercase tracking-wider mb-2" style={{ color: 'var(--color-theme-fg-muted)' }}>Completed</p>
           <div className="space-y-2">
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {completed.map(todo => (
                 <motion.div
                   key={todo.id}
