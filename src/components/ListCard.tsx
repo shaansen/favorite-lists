@@ -23,7 +23,7 @@ export function ListCard({ list, onClick, onDelete }: ListCardProps) {
     >
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
-          <h3 className="font-heading font-bold truncate" style={{ color: 'var(--color-theme-fg)' }}>{list.name}</h3>
+          <h3 className="font-heading font-bold break-words" style={{ color: 'var(--color-theme-fg)' }}>{list.name}</h3>
           <p className="text-sm mt-1" style={{ color: 'var(--color-theme-fg-muted)' }}>{activeItems.length} items</p>
         </div>
         <button
@@ -38,7 +38,7 @@ export function ListCard({ list, onClick, onDelete }: ListCardProps) {
       </div>
       <div className="flex items-center gap-1.5 mt-3">
         <Avatar name={list.createdBy} size={20} />
-        <span className="text-xs" style={{ color: 'var(--color-theme-fg-muted)' }}>{list.createdBy}</span>
+        <span className="text-sm" style={{ color: 'var(--color-theme-fg-muted)' }}>{list.createdBy}</span>
       </div>
     </motion.div>
   )

@@ -64,7 +64,7 @@ export function TodoPage() {
                 className="shrink-0 w-6 h-6 rounded-full transition-colors"
                 style={{ border: '2px solid var(--color-theme-border-strong)' }}
               />
-              <p className="flex-1 min-w-0 truncate" style={{ color: 'var(--color-theme-fg)' }}>{todo.text}</p>
+              <p className="flex-1 min-w-0 break-words" style={{ color: 'var(--color-theme-fg)' }}>{todo.text}</p>
               <button onClick={() => handleDelete(todo.id)} className="p-1 hover:opacity-80" style={{ color: 'var(--color-theme-danger)' }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 6L6 18M6 6l12 12" />
@@ -77,7 +77,7 @@ export function TodoPage() {
 
       {completed.length > 0 && (
         <div className="mt-6">
-          <p className="text-xs uppercase tracking-wider mb-2" style={{ color: 'var(--color-theme-fg-muted)' }}>Completed</p>
+          <p className="text-sm uppercase tracking-wider mb-2" style={{ color: 'var(--color-theme-fg-muted)' }}>Completed</p>
           <div className="space-y-2">
             <AnimatePresence>
               {completed.map(todo => (
@@ -99,7 +99,7 @@ export function TodoPage() {
                       <path d="M20 6L9 17l-5-5" />
                     </svg>
                   </button>
-                  <p className="flex-1 line-through min-w-0 truncate" style={{ color: 'var(--color-theme-fg-muted)' }}>{todo.text}</p>
+                  <p className="flex-1 line-through min-w-0 break-words" style={{ color: 'var(--color-theme-fg-muted)' }}>{todo.text}</p>
                   <button onClick={() => handleDelete(todo.id)} className="p-1 hover:opacity-80" style={{ color: 'var(--color-theme-danger)' }}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 6L6 18M6 6l12 12" />

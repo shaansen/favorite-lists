@@ -140,8 +140,8 @@ export function ListDetailPage() {
                 {activeItem.rank}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-medium truncate" style={{ color: 'var(--color-theme-fg)' }}>{activeItem.name}</p>
-                {activeItem.notes && <p className="text-xs truncate" style={{ color: 'var(--color-theme-fg-muted)' }}>{activeItem.notes}</p>}
+                <p className="font-medium break-words" style={{ color: 'var(--color-theme-fg)' }}>{activeItem.name}</p>
+                {activeItem.notes && <p className="text-sm break-words" style={{ color: 'var(--color-theme-fg-muted)' }}>{activeItem.notes}</p>}
               </div>
               <Avatar name={activeItem.addedBy} size={22} />
             </div>

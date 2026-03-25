@@ -59,8 +59,8 @@ export function ItemRow({ item, onDelete, isDragging }: ItemRowProps) {
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="font-medium truncate" style={{ color: 'var(--color-theme-fg)' }}>{item.name}</p>
-        {item.notes && <p className="text-xs truncate" style={{ color: 'var(--color-theme-fg-muted)' }}>{item.notes}</p>}
+        <p className="font-medium break-words" style={{ color: 'var(--color-theme-fg)' }}>{item.name}</p>
+        {item.notes && <p className="text-sm break-words" style={{ color: 'var(--color-theme-fg-muted)' }}>{item.notes}</p>}
       </div>
 
       <Avatar name={item.addedBy} size={22} />
