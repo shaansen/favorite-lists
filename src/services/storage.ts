@@ -3,8 +3,7 @@ import type { AppData, AppSettings, QueuedWrite } from '../types'
 const KEYS = {
   settings: 'favlists-settings',
   data: 'favlists-data',
-  sha: 'favlists-sha',
-  etag: 'favlists-etag',
+  updatedAt: 'favlists-updated-at',
   queue: 'favlists-queue',
 } as const
 
@@ -24,11 +23,8 @@ export const storage = {
   getData: () => get<AppData>(KEYS.data),
   setData: (d: AppData) => set(KEYS.data, d),
 
-  getSha: () => localStorage.getItem(KEYS.sha),
-  setSha: (sha: string) => localStorage.setItem(KEYS.sha, sha),
-
-  getEtag: () => localStorage.getItem(KEYS.etag),
-  setEtag: (etag: string) => localStorage.setItem(KEYS.etag, etag),
+  getUpdatedAt: () => localStorage.getItem(KEYS.updatedAt),
+  setUpdatedAt: (ts: string) => localStorage.setItem(KEYS.updatedAt, ts),
 
   getQueue: () => get<QueuedWrite[]>(KEYS.queue) ?? [],
   setQueue: (q: QueuedWrite[]) => set(KEYS.queue, q),

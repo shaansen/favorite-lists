@@ -20,17 +20,10 @@ export interface AppData {
   lists: FavoriteList[]
 }
 
-export interface GitHubFileResponse {
-  content: string
-  sha: string
-  encoding: string
-}
-
 export interface AppSettings {
   displayName: string
-  githubToken: string
-  repoOwner: string
-  repoName: string
+  supabaseUrl: string
+  supabaseAnonKey: string
 }
 
 export interface QueuedWrite {

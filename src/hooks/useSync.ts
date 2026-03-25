@@ -12,7 +12,7 @@ export function useSync(settings: AppSettings | null) {
     if (!settings || initialized.current) return
     initialized.current = true
 
-    syncManager.configure(settings.githubToken, settings.repoOwner, settings.repoName)
+    syncManager.configure(settings.supabaseUrl, settings.supabaseAnonKey, settings.displayName)
     syncManager.onUpdate((newData, newStatus) => {
       setData(newData)
       setStatus(newStatus)
@@ -21,12 +21,12 @@ export function useSync(settings: AppSettings | null) {
     syncManager.initialize().then(d => {
       setData(d)
       setStatus('synced')
-      syncManager.startPolling()
+      syncManager.startListening()
     }).catch(() => {
       setStatus('error')
     })
 
-    return () => syncManager.stopPolling()
+    return () => syncManager.stopListening()
   }, [settings])
 
   const updateData = useCallback((updater: (prev: AppData) => AppData) => {

@@ -1,23 +1,18 @@
 import type { AppData, SyncStatus } from '../types'
-import { fetchDataFile, writeDataFile, createDataFileIfMissing, ConflictError } from './github'
+import { initClient, fetchData, writeData, initializeIfMissing, subscribe, ConflictError } from './supabase'
 import { storage } from './storage'
 import { mergeData } from '../utils/merge'
-
-const POLL_INTERVAL = 20_000
 
 export type SyncListener = (data: AppData, status: SyncStatus) => void
 
 export class SyncManager {
-  private token = ''
-  private owner = ''
-  private repo = ''
-  private intervalId: ReturnType<typeof setInterval> | null = null
+  private displayName = ''
+  private unsubscribe: (() => void) | null = null
   private listener: SyncListener | null = null
 
-  configure(token: string, owner: string, repo: string) {
-    this.token = token
-    this.owner = owner
-    this.repo = repo
+  configure(url: string, anonKey: string, displayName: string) {
+    initClient(url, anonKey)
+    this.displayName = displayName
   }
 
   onUpdate(listener: SyncListener) {
@@ -30,48 +25,39 @@ export class SyncManager {
   }
 
   async initialize(): Promise<AppData> {
-    let result = await fetchDataFile(this.token, this.owner, this.repo, false)
-    if (!result) {
-      const sha = await createDataFileIfMissing(this.token, this.owner, this.repo)
+    try {
+      const result = await fetchData()
+      storage.setData(result.data)
+      storage.setUpdatedAt(result.updatedAt)
+      return result.data
+    } catch {
+      const updatedAt = await initializeIfMissing()
       const empty: AppData = { lists: [] }
       storage.setData(empty)
-      storage.setSha(sha)
+      storage.setUpdatedAt(updatedAt)
       return empty
     }
-    storage.setData(result.data)
-    storage.setSha(result.sha)
-    return result.data
   }
 
-  startPolling() {
-    this.stopPolling()
-    this.intervalId = setInterval(() => this.poll(), POLL_INTERVAL)
+  startListening() {
+    this.stopListening()
+    this.unsubscribe = subscribe((remoteData, updatedAt) => {
+      const local = storage.getData() ?? { lists: [] }
+      const merged = mergeData(local, remoteData)
+      storage.setUpdatedAt(updatedAt)
+      this.emit(merged, 'synced')
+    })
     window.addEventListener('online', this.handleOnline)
   }
 
-  stopPolling() {
-    if (this.intervalId) clearInterval(this.intervalId)
-    this.intervalId = null
+  stopListening() {
+    this.unsubscribe?.()
+    this.unsubscribe = null
     window.removeEventListener('online', this.handleOnline)
   }
 
   private handleOnline = () => {
     this.flushQueue()
-  }
-
-  private async poll() {
-    if (!navigator.onLine) return
-    try {
-      const result = await fetchDataFile(this.token, this.owner, this.repo)
-      if (result) {
-        const local = storage.getData() ?? { lists: [] }
-        const merged = mergeData(local, result.data)
-        storage.setSha(result.sha)
-        this.emit(merged, 'synced')
-      }
-    } catch {
-      this.emit(storage.getData() ?? { lists: [] }, 'error')
-    }
   }
 
   async push(data: AppData): Promise<void> {
@@ -81,24 +67,22 @@ export class SyncManager {
       return
     }
 
-    const sha = storage.getSha()
-    if (!sha) return
+    const updatedAt = storage.getUpdatedAt()
+    if (!updatedAt) return
 
     try {
       this.listener?.(data, 'syncing')
-      const newSha = await writeDataFile(this.token, this.owner, this.repo, data, sha)
-      storage.setSha(newSha)
+      const newUpdatedAt = await writeData(data, this.displayName, updatedAt)
+      storage.setUpdatedAt(newUpdatedAt)
       this.emit(data, 'synced')
     } catch (e) {
       if (e instanceof ConflictError) {
-        const result = await fetchDataFile(this.token, this.owner, this.repo, false)
-        if (result) {
-          const merged = mergeData(data, result.data)
-          storage.setSha(result.sha)
-          const newSha = await writeDataFile(this.token, this.owner, this.repo, merged, result.sha)
-          storage.setSha(newSha)
-          this.emit(merged, 'synced')
-        }
+        const result = await fetchData()
+        const merged = mergeData(data, result.data)
+        storage.setUpdatedAt(result.updatedAt)
+        const newUpdatedAt = await writeData(merged, this.displayName, result.updatedAt)
+        storage.setUpdatedAt(newUpdatedAt)
+        this.emit(merged, 'synced')
       } else {
         storage.enqueue(data)
         this.emit(data, 'error')
@@ -112,11 +96,9 @@ export class SyncManager {
 
     storage.clearQueue()
     const latest = queue[queue.length - 1].data
-    const remote = await fetchDataFile(this.token, this.owner, this.repo, false)
-    if (!remote) return
-
+    const remote = await fetchData()
+    storage.setUpdatedAt(remote.updatedAt)
     const merged = mergeData(latest, remote.data)
-    storage.setSha(remote.sha)
     await this.push(merged)
   }
 }

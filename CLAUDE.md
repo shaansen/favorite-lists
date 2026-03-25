@@ -7,7 +7,7 @@ Collaborative PWA for Shantanu and Charlie to create and manage ranked lists of 
 - **React + Vite + TypeScript** with **TailwindCSS v4** and **Framer Motion**
 - **PWA** via `vite-plugin-pwa` — installable on iPhone Safari via "Add to Home Screen"
 - **GitHub Pages** hosting with `HashRouter` for client-side routing
-- **GitHub Contents API** as serverless database — reads/writes `data/data.json` on `main` branch
+- **Supabase Realtime** as database + sync — single-row JSONB pattern with WebSocket subscriptions
 - **DiceBear Avatars** for user identity based on display name
 
 ## Key Directories
@@ -16,26 +16,25 @@ Collaborative PWA for Shantanu and Charlie to create and manage ranked lists of 
 src/
   components/   # ListCard, ItemRow, AddItemForm, SettingsModal, SyncStatus, Layout, Avatar
   pages/        # HomePage, ListDetailPage
-  services/     # github.ts (API client), sync.ts (polling/push), storage.ts (localStorage)
+  services/     # supabase.ts (API client), sync.ts (realtime/push), storage.ts (localStorage)
   hooks/        # useSync.ts, useSettings.ts
   types/        # index.ts (all interfaces)
   context/      # AppContext.tsx (global state)
   utils/        # merge.ts (conflict resolution)
 public/icons/   # PWA icons
-data/           # data.json (the "database")
 ```
 
 ## Data Flow
 
 1. App loads → reads cached data from localStorage
-2. Polls GitHub API every 20s with ETag (304 = no change)
-3. On write: optimistic local update → push to GitHub → handle 409 with merge
+2. Subscribes to Supabase Realtime channel for instant updates via WebSocket
+3. On write: optimistic local update → push to Supabase → handle conflict with merge
 4. Offline: queues writes in localStorage, flushes on reconnect
 
 ## Sync & Merge Strategy
 
-- SHA-based optimistic locking for GitHub writes
-- On conflict (409): re-fetch, merge by union of lists/items by ID
+- `updated_at` timestamp-based optimistic locking for Supabase writes
+- On conflict (no rows updated): re-fetch, merge by union of lists/items by ID, retry write
 - Soft-delete via `deletedAt` tombstone (purged after 24h)
 - Remote wins for field-level conflicts
 
@@ -54,5 +53,5 @@ data/           # data.json (the "database")
 ## Config
 
 - `vite.config.ts`: base path `/favorite-lists/`, Tailwind + PWA plugins
-- Settings stored in localStorage: display name, GitHub PAT, repo owner, repo name
+- Settings stored in localStorage: display name, Supabase URL, Supabase anon key
 - Theme: deep indigo/purple (#1e1b4b), Space Grotesk headings, Inter body text
