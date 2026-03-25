@@ -112,7 +112,8 @@ export function ItemRow({ item, onDelete, onEdit, isDragging }: ItemRowProps) {
             onChange={e => setEditNotes(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Notes (optional)"
-            className="w-full rounded-md px-2 py-1 text-sm focus:outline-none theme-input"
+            disabled={!editName.trim()}
+            className="w-full rounded-md px-2 py-1 text-sm focus:outline-none theme-input disabled:opacity-50"
           />
         </div>
       ) : (

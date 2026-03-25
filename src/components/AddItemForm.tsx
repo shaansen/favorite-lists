@@ -31,7 +31,8 @@ export function AddItemForm({ onAdd }: AddItemFormProps) {
           placeholder="Notes (optional)"
           value={notes}
           onChange={e => setNotes(e.target.value)}
-          className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none theme-input"
+          disabled={!name.trim()}
+          className="w-full rounded-lg px-3 py-2 text-sm focus:outline-none theme-input disabled:opacity-50"
         />
       </div>
       <button
