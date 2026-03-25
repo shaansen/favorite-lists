@@ -1,12 +1,44 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { v4 as uuid } from 'uuid'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useApp } from '../context/AppContext'
 import type { TodoItem } from '../types'
 
+function EditableTodoText({ text, onSave, onCancel }: { text: string, onSave: (newText: string) => void, onCancel: () => void }) {
+  const [value, setValue] = useState(text)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
+
+  const save = () => {
+    const trimmed = value.trim()
+    if (trimmed) onSave(trimmed)
+    else onCancel()
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') save()
+    if (e.key === 'Escape') onCancel()
+  }
+
+  return (
+    <input
+      ref={inputRef}
+      value={value}
+      onChange={e => setValue(e.target.value)}
+      onKeyDown={handleKeyDown}
+      onBlur={save}
+      className="flex-1 min-w-0 rounded-md px-2 py-1 focus:outline-none theme-input"
+    />
+  )
+}
+
 export function TodoPage() {
   const { data, updateData, settings } = useApp()
   const [text, setText] = useState('')
+  const [editingId, setEditingId] = useState<string | null>(null)
 
   const activeTodos = (data.todos ?? []).filter(t => !t.deletedAt)
   const incomplete = activeTodos.filter(t => !t.completedAt)
@@ -43,6 +75,13 @@ export function TodoPage() {
     )
   }
 
+  const handleEditTodo = (id: string, newText: string) => {
+    updateTodos(todos =>
+      todos.map(t => t.id === id ? { ...t, text: newText } : t)
+    )
+    setEditingId(null)
+  }
+
   return (
     <div>
       <h2 className="font-heading text-2xl font-bold mb-4" style={{ color: 'var(--color-theme-fg)' }}>Things to Do</h2>
@@ -71,7 +110,11 @@ export function TodoPage() {
                   style={{ border: '2px solid var(--color-theme-border-strong)' }}
                 />
               </button>
-              <p className="flex-1 min-w-0 break-words" style={{ color: 'var(--color-theme-fg)' }}>{todo.text}</p>
+              {editingId === todo.id ? (
+                <EditableTodoText text={todo.text} onSave={(t) => handleEditTodo(todo.id, t)} onCancel={() => setEditingId(null)} />
+              ) : (
+                <p className="flex-1 min-w-0 break-words cursor-pointer" style={{ color: 'var(--color-theme-fg)' }} onClick={() => setEditingId(todo.id)}>{todo.text}</p>
+              )}
               <button
                 onClick={() => handleDelete(todo.id)}
                 aria-label={`Delete "${todo.text}"`}
@@ -118,7 +161,11 @@ export function TodoPage() {
                       </svg>
                     </span>
                   </button>
-                  <p className="flex-1 line-through min-w-0 break-words" style={{ color: 'var(--color-theme-fg-muted)' }}>{todo.text}</p>
+                  {editingId === todo.id ? (
+                    <EditableTodoText text={todo.text} onSave={(t) => handleEditTodo(todo.id, t)} onCancel={() => setEditingId(null)} />
+                  ) : (
+                    <p className="flex-1 line-through min-w-0 break-words cursor-pointer" style={{ color: 'var(--color-theme-fg-muted)' }} onClick={() => setEditingId(todo.id)}>{todo.text}</p>
+                  )}
                   <button
                     onClick={() => handleDelete(todo.id)}
                     aria-label={`Delete "${todo.text}"`}

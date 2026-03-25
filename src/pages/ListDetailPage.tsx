@@ -73,6 +73,12 @@ export function ListDetailPage() {
     )
   }
 
+  const handleEdit = (itemId: string, name: string, notes: string) => {
+    updateList(items =>
+      items.map(i => i.id === itemId ? { ...i, name, notes } : i)
+    )
+  }
+
   const handleDragStart = (event: DragStartEvent) => {
     setActiveId(event.active.id as string)
   }
@@ -127,6 +133,7 @@ export function ListDetailPage() {
                   key={item.id}
                   item={item}
                   onDelete={() => handleDelete(item.id)}
+                  onEdit={(name, notes) => handleEdit(item.id, name, notes)}
                   isDragging={item.id === activeId}
                 />
               ))}
