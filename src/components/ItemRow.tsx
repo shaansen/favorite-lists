@@ -57,7 +57,11 @@ export function ItemRow({ item, onDelete, onNavigate, isDragging }: ItemRowProps
       <button className="flex-1 min-w-0 text-left" onClick={onNavigate}>
         <p className="font-medium break-words" style={{ color: 'var(--color-theme-fg)' }}>{item.name}</p>
         {item.cuisine && (
-          <p className="text-xs font-medium mt-0.5" style={{ color: 'var(--color-theme-primary)' }}>{item.cuisine}</p>
+          <div className="flex flex-wrap gap-1 mt-1">
+            {item.cuisine.split(',').map(c => c.trim()).filter(Boolean).map(c => (
+              <span key={c} className="text-xs font-medium px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'color-mix(in srgb, var(--color-theme-primary) 15%, transparent)', color: 'var(--color-theme-primary)' }}>{c}</span>
+            ))}
+          </div>
         )}
         {item.notes && (
           <p className="text-sm break-words mt-0.5" style={{ color: 'var(--color-theme-fg-muted)' }}>{item.notes}</p>

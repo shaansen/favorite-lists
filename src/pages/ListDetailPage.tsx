@@ -45,10 +45,13 @@ export function ListDetailPage() {
     .filter(i => !i.deletedAt)
     .sort((a, b) => a.rank - b.rank)
 
-  const cuisines = Array.from(new Set(allActiveItems.map(i => i.cuisine).filter(Boolean)))
+  const parseCuisines = (cuisine: string) =>
+    cuisine.split(',').map(c => c.trim()).filter(Boolean)
+
+  const cuisines = Array.from(new Set(allActiveItems.flatMap(i => parseCuisines(i.cuisine))))
 
   const activeItems = selectedCuisine
-    ? allActiveItems.filter(i => i.cuisine === selectedCuisine)
+    ? allActiveItems.filter(i => parseCuisines(i.cuisine).includes(selectedCuisine))
     : allActiveItems
 
   const activeItem = allActiveItems.find(i => i.id === activeId)
@@ -183,7 +186,11 @@ export function ListDetailPage() {
               <div className="flex-1 min-w-0">
                 <p className="font-medium break-words" style={{ color: 'var(--color-theme-fg)' }}>{activeItem.name}</p>
                 {activeItem.cuisine && (
-                  <p className="text-xs font-medium mt-0.5" style={{ color: 'var(--color-theme-primary)' }}>{activeItem.cuisine}</p>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {parseCuisines(activeItem.cuisine).map(c => (
+                      <span key={c} className="text-xs font-medium px-1.5 py-0.5 rounded-full" style={{ backgroundColor: 'color-mix(in srgb, var(--color-theme-primary) 15%, transparent)', color: 'var(--color-theme-primary)' }}>{c}</span>
+                    ))}
+                  </div>
                 )}
                 {activeItem.notes && <p className="text-sm break-words mt-0.5" style={{ color: 'var(--color-theme-fg-muted)' }}>{activeItem.notes}</p>}
               </div>
