@@ -1,0 +1,22 @@
+name: Keep Supabase alive
+
+on:
+  schedule:
+    - cron: '0 9 */5 * *'  # every 5 days at 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://pkaspllzxxndxixotmrq.supabase.co/rest/v1/app_data?id=eq.singleton&select=id" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+          echo "Response: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "Unexpected status $STATUS"
+            exit 1
+          fi

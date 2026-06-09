@@ -26,7 +26,13 @@ export function useSync(settings: AppSettings | null) {
       setStatus('error')
     })
 
-    return () => syncManager.stopListening()
+    const FOUR_DAYS_MS = 4 * 24 * 60 * 60 * 1000
+    const heartbeat = setInterval(() => syncManager.forceSync(), FOUR_DAYS_MS)
+
+    return () => {
+      syncManager.stopListening()
+      clearInterval(heartbeat)
+    }
   }, [settings])
 
   const updateData = useCallback((updater: (prev: AppData) => AppData) => {
