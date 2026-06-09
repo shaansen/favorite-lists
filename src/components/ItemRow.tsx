@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -8,49 +7,12 @@ import { Avatar } from './Avatar'
 interface ItemRowProps {
   item: ListItem
   onDelete: () => void
-  onEdit: (name: string, notes: string) => void
+  onNavigate: () => void
   isDragging?: boolean
 }
 
-export function ItemRow({ item, onDelete, onEdit, isDragging }: ItemRowProps) {
-  const [editing, setEditing] = useState(false)
-  const [editName, setEditName] = useState(item.name)
-  const [editNotes, setEditNotes] = useState(item.notes)
-  const nameRef = useRef<HTMLInputElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-  } = useSortable({ id: item.id, disabled: editing })
-
-  useEffect(() => {
-    if (editing) nameRef.current?.focus()
-  }, [editing])
-
-  const startEditing = () => {
-    setEditName(item.name)
-    setEditNotes(item.notes)
-    setEditing(true)
-  }
-
-  const save = () => {
-    const trimmed = editName.trim()
-    if (trimmed) onEdit(trimmed, editNotes.trim())
-    setEditing(false)
-  }
-
-  const cancel = () => {
-    setEditing(false)
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') save()
-    if (e.key === 'Escape') cancel()
-  }
+export function ItemRow({ item, onDelete, onNavigate, isDragging }: ItemRowProps) {
+  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: item.id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -92,38 +54,21 @@ export function ItemRow({ item, onDelete, onEdit, isDragging }: ItemRowProps) {
         {item.rank}
       </div>
 
-      {editing ? (
-        <div
-          ref={containerRef}
-          className="flex-1 min-w-0 space-y-1"
-          onBlur={(e) => {
-            if (!containerRef.current?.contains(e.relatedTarget as Node)) save()
-          }}
-        >
-          <input
-            ref={nameRef}
-            value={editName}
-            onChange={e => setEditName(e.target.value)}
-            onKeyDown={handleKeyDown}
-            className="w-full rounded-md px-2 py-1 font-medium focus:outline-none theme-input"
-          />
-          <input
-            value={editNotes}
-            onChange={e => setEditNotes(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Notes (optional)"
-            disabled={!editName.trim()}
-            className="w-full rounded-md px-2 py-1 text-sm focus:outline-none theme-input disabled:opacity-50"
-          />
-        </div>
-      ) : (
-        <div className="flex-1 min-w-0 cursor-pointer" onClick={startEditing}>
-          <p className="font-medium break-words" style={{ color: 'var(--color-theme-fg)' }}>{item.name}</p>
-          {item.notes && <p className="text-sm break-words" style={{ color: 'var(--color-theme-fg-muted)' }}>{item.notes}</p>}
-        </div>
-      )}
+      <button className="flex-1 min-w-0 text-left" onClick={onNavigate}>
+        <p className="font-medium break-words" style={{ color: 'var(--color-theme-fg)' }}>{item.name}</p>
+        {item.cuisine && (
+          <p className="text-xs font-medium mt-0.5" style={{ color: 'var(--color-theme-primary)' }}>{item.cuisine}</p>
+        )}
+        {item.notes && (
+          <p className="text-sm break-words mt-0.5" style={{ color: 'var(--color-theme-fg-muted)' }}>{item.notes}</p>
+        )}
+      </button>
 
       <Avatar name={item.addedBy} size={22} />
+
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-theme-border-strong)', flexShrink: 0 }}>
+        <path d="M9 18l6-6-6-6" />
+      </svg>
 
       <button
         onClick={onDelete}

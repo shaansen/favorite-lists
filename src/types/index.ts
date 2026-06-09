@@ -2,6 +2,7 @@ export interface ListItem {
   id: string
   name: string
   notes: string
+  cuisine: string
   rank: number
   addedBy: string
   deletedAt?: string

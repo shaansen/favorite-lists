@@ -24,6 +24,7 @@ export function ListDetailPage() {
   const navigate = useNavigate()
   const { data, updateData, settings } = useApp()
   const [activeId, setActiveId] = useState<string | null>(null)
+  const [selectedCuisine, setSelectedCuisine] = useState<string | null>(null)
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
@@ -40,11 +41,17 @@ export function ListDetailPage() {
     )
   }
 
-  const activeItems = list.items
+  const allActiveItems = list.items
     .filter(i => !i.deletedAt)
     .sort((a, b) => a.rank - b.rank)
 
-  const activeItem = activeItems.find(i => i.id === activeId)
+  const cuisines = Array.from(new Set(allActiveItems.map(i => i.cuisine).filter(Boolean)))
+
+  const activeItems = selectedCuisine
+    ? allActiveItems.filter(i => i.cuisine === selectedCuisine)
+    : allActiveItems
+
+  const activeItem = allActiveItems.find(i => i.id === activeId)
 
   const updateList = (updater: (items: ListItem[]) => ListItem[]) => {
     updateData(prev => ({
@@ -57,11 +64,12 @@ export function ListDetailPage() {
 
   const handleAdd = (name: string, notes: string) => {
     if (!settings) return
-    const maxRank = activeItems.reduce((max, i) => Math.max(max, i.rank), 0)
+    const maxRank = allActiveItems.reduce((max, i) => Math.max(max, i.rank), 0)
     updateList(items => [...items, {
       id: uuid(),
       name,
       notes,
+      cuisine: '',
       rank: maxRank + 1,
       addedBy: settings.displayName,
     }])
@@ -73,13 +81,8 @@ export function ListDetailPage() {
     )
   }
 
-  const handleEdit = (itemId: string, name: string, notes: string) => {
-    updateList(items =>
-      items.map(i => i.id === itemId ? { ...i, name, notes } : i)
-    )
-  }
-
   const handleDragStart = (event: DragStartEvent) => {
+    if (selectedCuisine) return
     setActiveId(event.active.id as string)
   }
 
@@ -88,11 +91,11 @@ export function ListDetailPage() {
     const { active, over } = event
     if (!over || active.id === over.id) return
 
-    const oldIndex = activeItems.findIndex(i => i.id === active.id)
-    const newIndex = activeItems.findIndex(i => i.id === over.id)
+    const oldIndex = allActiveItems.findIndex(i => i.id === active.id)
+    const newIndex = allActiveItems.findIndex(i => i.id === over.id)
     if (oldIndex < 0 || newIndex < 0) return
 
-    const reordered = arrayMove(activeItems, oldIndex, newIndex)
+    const reordered = arrayMove(allActiveItems, oldIndex, newIndex)
     const rankMap = new Map(reordered.map((item, idx) => [item.id, idx + 1]))
 
     updateList(items =>
@@ -119,6 +122,36 @@ export function ListDetailPage() {
 
       <h2 className="font-heading text-2xl font-bold mb-4" style={{ color: 'var(--color-theme-fg)' }}>{list.name}</h2>
 
+      {cuisines.length > 0 && (
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-4 no-scrollbar">
+          <button
+            onClick={() => setSelectedCuisine(null)}
+            className="shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+            style={{
+              backgroundColor: selectedCuisine === null ? 'var(--color-theme-primary)' : 'var(--color-theme-surface)',
+              color: selectedCuisine === null ? '#fff' : 'var(--color-theme-fg-muted)',
+              border: '1px solid var(--color-theme-border)',
+            }}
+          >
+            All
+          </button>
+          {cuisines.map(c => (
+            <button
+              key={c}
+              onClick={() => setSelectedCuisine(c === selectedCuisine ? null : c)}
+              className="shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-colors"
+              style={{
+                backgroundColor: selectedCuisine === c ? 'var(--color-theme-primary)' : 'var(--color-theme-surface)',
+                color: selectedCuisine === c ? '#fff' : 'var(--color-theme-fg-muted)',
+                border: '1px solid var(--color-theme-border)',
+              }}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      )}
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -133,7 +166,7 @@ export function ListDetailPage() {
                   key={item.id}
                   item={item}
                   onDelete={() => handleDelete(item.id)}
-                  onEdit={(name, notes) => handleEdit(item.id, name, notes)}
+                  onNavigate={() => navigate(`/list/${id}/item/${item.id}`)}
                   isDragging={item.id === activeId}
                 />
               ))}
@@ -149,7 +182,10 @@ export function ListDetailPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium break-words" style={{ color: 'var(--color-theme-fg)' }}>{activeItem.name}</p>
-                {activeItem.notes && <p className="text-sm break-words" style={{ color: 'var(--color-theme-fg-muted)' }}>{activeItem.notes}</p>}
+                {activeItem.cuisine && (
+                  <p className="text-xs font-medium mt-0.5" style={{ color: 'var(--color-theme-primary)' }}>{activeItem.cuisine}</p>
+                )}
+                {activeItem.notes && <p className="text-sm break-words mt-0.5" style={{ color: 'var(--color-theme-fg-muted)' }}>{activeItem.notes}</p>}
               </div>
               <Avatar name={activeItem.addedBy} size={22} />
             </div>
@@ -158,7 +194,9 @@ export function ListDetailPage() {
       </DndContext>
 
       {activeItems.length === 0 && (
-        <p className="text-center py-8" style={{ color: 'var(--color-theme-fg-muted)' }}>No items yet. Add the first one below.</p>
+        <p className="text-center py-8" style={{ color: 'var(--color-theme-fg-muted)' }}>
+          {selectedCuisine ? `No items tagged "${selectedCuisine}"` : 'No items yet. Add the first one below.'}
+        </p>
       )}
 
       <AddItemForm onAdd={handleAdd} />
