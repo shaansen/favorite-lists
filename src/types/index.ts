@@ -16,17 +16,8 @@ export interface FavoriteList {
   deletedAt?: string
 }
 
-export interface TodoItem {
-  id: string
-  text: string
-  completedAt?: string
-  addedBy: string
-  deletedAt?: string
-}
-
 export interface AppData {
   lists: FavoriteList[]
-  todos: TodoItem[]
 }
 
 export interface AppSettings {

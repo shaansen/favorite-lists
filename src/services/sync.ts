@@ -32,7 +32,7 @@ export class SyncManager {
       return result.data
     } catch {
       const updatedAt = await initializeIfMissing()
-      const empty: AppData = { lists: [], todos: [] }
+      const empty: AppData = { lists: [] }
       storage.setData(empty)
       storage.setUpdatedAt(updatedAt)
       return empty
@@ -88,9 +88,9 @@ export class SyncManager {
   }
 
   async forceSync(): Promise<AppData> {
-    this.listener?.(storage.getData() ?? { lists: [], todos: [] }, 'syncing')
+    this.listener?.(storage.getData() ?? { lists: [] }, 'syncing')
     const result = await fetchData()
-    const local = storage.getData() ?? { lists: [], todos: [] }
+    const local = storage.getData() ?? { lists: [] }
     const merged = mergeData(local, result.data)
     storage.setUpdatedAt(result.updatedAt)
     this.emit(merged, 'synced')

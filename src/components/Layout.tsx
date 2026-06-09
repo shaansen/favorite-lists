@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { NavLink } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { Avatar } from './Avatar'
 import { SyncStatusIndicator } from './SyncStatus'
@@ -41,38 +40,9 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </nav>
 
-      <main className="max-w-2xl mx-auto px-4 py-6 pb-28">
+      <main className="max-w-2xl mx-auto px-4 py-6">
         {children}
       </main>
-
-      <div className="fixed bottom-0 left-0 right-0 z-40 backdrop-blur-lg safe-bottom" style={{ backgroundColor: 'color-mix(in srgb, var(--color-theme-bg) 90%, transparent)', borderTop: '1px solid var(--color-theme-border)' }}>
-        <div className="max-w-2xl mx-auto flex">
-          <NavLink
-            to="/"
-            end
-            aria-label="Rankings"
-            className="flex-1 flex flex-col items-center gap-1 py-3 text-xs font-medium transition-colors min-h-[48px] justify-center"
-            style={({ isActive }) => ({ color: isActive ? 'var(--color-theme-primary)' : 'var(--color-theme-fg-muted)' })}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
-            </svg>
-            Rankings
-          </NavLink>
-          <NavLink
-            to="/todos"
-            aria-label="To Do"
-            className="flex-1 flex flex-col items-center gap-1 py-3 text-xs font-medium transition-colors min-h-[48px] justify-center"
-            style={({ isActive }) => ({ color: isActive ? 'var(--color-theme-primary)' : 'var(--color-theme-fg-muted)' })}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 11l3 3L22 4" />
-              <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-            </svg>
-            To Do
-          </NavLink>
-        </div>
-      </div>
 
       <SettingsModal
         open={showSettings}
