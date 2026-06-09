@@ -45,8 +45,8 @@ export function ListDetailPage() {
     .filter(i => !i.deletedAt)
     .sort((a, b) => a.rank - b.rank)
 
-  const parseCuisines = (cuisine: string) =>
-    cuisine.split(',').map(c => c.trim()).filter(Boolean)
+  const parseCuisines = (cuisine: string | undefined) =>
+    (cuisine ?? '').split(',').map(c => c.trim()).filter(Boolean)
 
   const cuisines = Array.from(new Set(allActiveItems.flatMap(i => parseCuisines(i.cuisine))))
 
