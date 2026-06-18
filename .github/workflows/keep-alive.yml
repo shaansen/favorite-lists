@@ -2,21 +2,18 @@ name: Keep Supabase alive
 
 on:
   schedule:
-    - cron: '0 9 */5 * *'  # every 5 days at 09:00 UTC
+    - cron: '17 8 * * *'
   workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase
+      - uses: actions/checkout@v4
+      - name: Ping Supabase REST API
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "https://pkaspllzxxndxixotmrq.supabase.co/rest/v1/app_data?id=eq.singleton&select=id" \
-            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
-          echo "Response: $STATUS"
-          if [ "$STATUS" != "200" ]; then
-            echo "Unexpected status $STATUS"
-            exit 1
-          fi
+          set -a; source .env; set +a
+          curl -fsS "$VITE_SUPABASE_URL/rest/v1/app_data?id=eq.singleton&select=id" \
+            -H "apikey: $VITE_SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $VITE_SUPABASE_ANON_KEY" \
+            -o /dev/null -w "Pinged Supabase — HTTP %{http_code}\n"
